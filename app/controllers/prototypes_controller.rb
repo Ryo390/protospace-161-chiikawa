@@ -1,7 +1,7 @@
 class PrototypesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-  before_action :set_prototype, only: [:show, :edit, :update]
-  before_action :non_poster_to_root, only: [:edit, :update]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_prototype, only: [:show, :edit, :update, :destroy]
+  before_action :non_poster_to_root, only: [:edit, :update, :destroy]
 
   def index
     @prototypes = Prototype.includes(:user)
@@ -32,6 +32,12 @@ class PrototypesController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    prototype = Prototype.find(params[:id])
+    prototype.destroy
+    redirect_to root_path
   end
 
   private
