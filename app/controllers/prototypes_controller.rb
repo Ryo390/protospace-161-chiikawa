@@ -1,6 +1,7 @@
 class PrototypesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   before_action :set_prototype, only: [:show, :edit, :update]
+  before_action :non_poster_to_root, only: [:edit, :update]
 
   def index
     @prototypes = Prototype.includes(:user)
@@ -41,5 +42,9 @@ class PrototypesController < ApplicationController
 
   def set_prototype
     @prototype = Prototype.find(params[:id])
+  end
+
+  def non_poster_to_root
+    redirect_to root_path unless current_user.id == @prototype.user.id
   end
 end
